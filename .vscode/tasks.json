@@ -1,0 +1,84 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558 
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "g++.exe build active file",
+            "command": "C:\\TDM-GCC-32\\bin\\gcc.exe",
+            "args": [
+                //"-Wall",
+                "-g",
+                "${workspaceFolder}\\source\\main.c",
+                //"${workspaceFolder}\\source\\oop.c",
+                "${workspaceFolder}\\source\\TCollection.c",
+                //"${workspaceFolder}\\source\\THashMap.c"
+                //,"${workspaceFolder}\\source\\answer.c"
+                // output of the code
+                //,
+                "-o",
+                "${workspaceFolder}\\build\\main.exe"
+                // path the local library
+                ,
+                "-L${workspaceFolder}\\lib\\obj"
+                //,"-LC:\\TDM-GCC-32\\lib"
+                // path the local include files
+                ,
+                "-I${workspaceFolder}\\lib\\include"
+                // linking SDL statically
+                //The common libraries from mingw
+                ,
+                "-limagehlp",
+                "-lmingw32",
+                "-mwindows",
+                "-lm",
+                "-ldinput8",
+                "-ldxguid",
+                "-ldxerr8",
+                "-luser32",
+                "-lgdi32",
+                "-lwinmm",
+                "-limm32",
+                "-lole32",
+                "-loleaut32",
+                "-lshell32",
+                "-lversion",
+                "-luuid",
+                "-static-libgcc",
+                "-lSDL2main",
+                "-lSDL2-dll"
+                // 3DEngine - lrrlicht 1.8.4 (Requires Irrlicht.dll)
+                //,"-lIrrlicht"
+                //ODE -Physics Engine v0.16 (Dec2018)
+                //,"-lode_singled"
+                //,"-Wl,--subsystem,windows"
+            ],
+            "options": {
+                "cwd": "C:\\TDM-GCC-32\\bin\\"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Build Unit-test for PluginSys",
+            "command": "C:\\TDM-GCC-32\\bin\\mingw32-make.exe",
+            "args": [
+                "build-test"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+{
+    "configurations": [{
+        "name": "Win32",
+        "includePath": [
+            "${workspaceFolder}/lib/include",
+            "C:/TDM-GCC-32/mingw32/include",
+            "C:/TDM-GCC-32/lib/gcc/mingw32/5.1.0/include/c++",
+            "C:/TDM-GCC-32/lib/gcc/mingw32/5.1.0/include/c++/mingw32",
+            "C:/TDM-GCC-32/lib/gcc/mingw32/5.1.0/include/"
+        ],
+        "defines": [
+            "_DEBUG",
+            "UNICODE",
+            "_UNICODE"
+        ],
+        "windowsSdkVersion": "10.0.17763.0",
+        "compilerPath": "C:\\TDM-GCC-32\\bin\\gcc.exe",
+        "cStandard": "c99",
+        "cppStandard": "c++20",
+        "intelliSenseMode": "gcc-x64"
+    }],
+    "version": 4
+}
