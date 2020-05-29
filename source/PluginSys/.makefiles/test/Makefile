@@ -8,17 +8,20 @@ SrcPath = $(BuildPath)/..
 DebugObjPath = $(BuildPath)/debug
 
 .PHONY: build
-build: subsystems PluginSys.test.dll
+build: Clean-up subsystems PluginSys.test.dll
 
 ## Build all necessary dependent object files first
 subsystems:
 	$(MAKE) -C $(DebugObjPath)
 
-PluginSys.test.dll : PluginSys.test.o
+PluginSys.test.dll : PluginSys.test.o TApple.o
 	$(GccPath)\gcc $^ -shared -o $@
 
 PluginSys.test.o:
 	$(GccPath)\gcc -c -g _test.c -I$(SrcPath) -o $@
+
+TApple.o:
+	$(GccPath)\gcc -c -g TApple.c -I$(SrcPath) -o $@
 
 .PHONY: Clean-up
 Clean-up:

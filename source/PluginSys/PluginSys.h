@@ -5,21 +5,19 @@
 
 typedef int TClassHandle;
 typedef struct INamespaceContext_struct INamespaceContext;
-typedef struct
-{
-    /*
-    Cast the current object to a different Type
-    */
-    void *(*Cast)(void * /*this*/, TClassHandle * /*IClass*/);
-} IInterface;
+//struct IInterface
+//{
+//    /*
+//    Cast the current object to a different Type
+//    */
+//    void *(*Cast)(void * /*this*/, TClassHandle * /*IClass*/);
+//};
 
 /*This is the interface that all concrete classes must extend. It MUST be declared as the 
 FIRST field of the class*/
-typedef struct
+struct IObject
 {
-    IInterface baseClass;
-    /*destructor method to be called when the object is being freed*/
-    void (*Destructor)(void ** /*this*/);
+    void (*_objDstr)(void ** /*this*/);
     /*constructor for creating an instance or return a singleton instance of the class
     arg:
         aCtx -> used by the Constructor perform any initialisation/stat-updates on the
@@ -29,8 +27,8 @@ typedef struct
     returns:
         A new object or singleton depends on the implementation of the constructor
     */
-    void *(*Constructor)(INamespaceContext **aCtx);
-} IObject;
+    void *(*_objCstr)(INamespaceContext **aCtx);
+};
 #define IObjectHandler -1
 
 /*plugin loader is a collection to load*/
@@ -48,7 +46,7 @@ struct INamespaceContext_struct
     Fatal:
         if aClass or aName is set to NULL or aName is malformed
     */
-    int (*MapClassByName)(void *aThis, IObject *aClass, char *aName);
+    int (*MapClassByName)(void *aThis, struct IObject *aClass, char *aName);
 
     /*
     args:

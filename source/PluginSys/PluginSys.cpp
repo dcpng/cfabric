@@ -97,10 +97,10 @@ void *_imp_InstanceByClassHandle(void *aThis, TClassHandle aClassHandle)
     INamespaceContextImpl *vThis = (INamespaceContextImpl *)aThis;
     if (0 <= aClassHandle && aClassHandle < vThis->Classes->size())
     {
-        IObject *vClassDef = (IObject *)(*(vThis->Classes))[aClassHandle];
+        struct IObject *vClassDef = (IObject *)(*(vThis->Classes))[aClassHandle];
         if (vClassDef != NULL)
         {
-            return vClassDef->Constructor((INamespaceContext **)vThis);
+            return vClassDef->_objCstr((INamespaceContext **)vThis);
         }
     }
     return NULL;

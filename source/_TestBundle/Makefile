@@ -8,7 +8,7 @@ build-test: Clean-up subsystems Test.exe
 # Ensure all test modules are built
 subsystems:
 	$(MAKE) -C $(SrcPath)/PluginSys/.makefiles/test
-	$(MAKE) -C $(SrcPath)/TClassBuilder/.makefiles/test
+	$(MAKE) -C $(SrcPath)/TClassAction/.makefiles/test
 
 # Build the test harness
 Test.exe: Test.o

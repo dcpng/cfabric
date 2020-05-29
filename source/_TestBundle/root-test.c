@@ -12,5 +12,5 @@ void main(void)
     void (*TestMain)();
     HANDLE gDllHandle;
     DoTest(PluginSys);
-    DoTest(TClassBuilder);
+    DoTest(TClassAction);
 }
