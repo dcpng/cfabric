@@ -50,7 +50,8 @@
         "cinttypes": "c",
         "cstdbool": "c",
         "utility": "c",
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "forward_list": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

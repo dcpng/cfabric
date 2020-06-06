@@ -8,7 +8,7 @@
             "name": "Debug Test for PluginSys.dll",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}\\source\\_testBundle\\Test.exe",
+            "program": "${workspaceFolder}\\test\\Test.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -16,7 +16,7 @@
             //"externalConsole": true,
             //"console": "integratedTerminal",
             "MIMode": "gdb",
-            "miDebuggerPath": "C:\\TDM-GCC-32\\gdb32\\bin\\gdb32.exe",
+            "miDebuggerPath": "C:\\TDM-GCC-64\\gdb64\\bin\\gdb.exe",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",
