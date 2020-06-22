@@ -1,4 +1,4 @@
-#include "cfabric.h"
+#include "_internal.h"
 
 struct cfb_class_helper_sFields
 {
@@ -22,7 +22,7 @@ static void *get_interface(void **aThis, cfb_class_hnd_t vClassHandle)
     __auto_type vVtbHdr = (struct _classbuilder_TVTableHeader *)((*aThis) - sizeof(struct _classbuilder_TVTableHeader));
     /*point to the header section of the class instance*/
 
-    __auto_type vCastmap = ((struct _classbuilder_TClassHeader *)((void *)vVtbHdr + vVtbHdr->hdrOffset))->ptrCastMap;
+    __auto_type vCastmap = ((struct _classbuilder_TClassHeader *)((void *)vVtbHdr - vVtbHdr->hdrOffset))->ptrCastMap;
 
     __auto_type vMyOffset = vCastmap->entries[vVtbHdr->castMapEntryIdx].fieldOffset;
     if (vClassHandle == IObjectHandler)
@@ -44,7 +44,7 @@ static void *get_interface(void **aThis, cfb_class_hnd_t vClassHandle)
 static void *get_obj_data(void **aThis)
 {
     /*vtable header always located behind the address of the current vtable*/
-    __auto_type vVtbHdr = (struct _classbuilder_TVTableHeader *)((*aThis) - sizeof(struct _classbuilder_TVTableHeader));
+    __auto_type vVtbHdr = &((struct _classbuilder_TVTableHeader *)(*aThis))[-1];
     /*point to the data section of the object's instance*/
     return (void *)aThis + vVtbHdr->instanceDataOffset;
 }
@@ -69,7 +69,7 @@ static void del_obj(void ***aObj)
         /*vtable header always located behind the address of the current vtable*/
         __auto_type vVtbHdr = (struct _classbuilder_TVTableHeader *)((**aObj) - sizeof(struct _classbuilder_TVTableHeader));
         /*point to the data section of the object's instance*/
-        struct cfb_obj_lifecycle_iface_s *vIObject =
+        struct cfb_object_s *vIObject =
             (void *)vVtbHdr + vVtbHdr->hdrOffset + sizeof(struct _classbuilder_TClassHeader) + sizeof(struct _classbuilder_TVTableHeader);
         vIObject->on_del(*aObj);
         free(get_interface(*aObj, IObjectHandler));
@@ -79,11 +79,7 @@ static void del_obj(void ***aObj)
 
 static void *on_new(cfb_plugin_t **aCtx)
 {
-    if (!classBuilderImpl)
-    {
-        classBuilderImpl = alloc_obj(ClassInfo(cfb_class_helper_s));
-    }
-    return classBuilderImpl;
+    return alloc_obj(ClassInfo(cfb_class_helper_s));
 }
 
 static void on_del(void **aThis)

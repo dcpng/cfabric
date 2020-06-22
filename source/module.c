@@ -1,35 +1,48 @@
-#include "cfabric.h"
+#include "module.h"
+#include "_internal.h"
 
-struct class_hnds
+#define implement_class(name, plugin) \
+    ((struct cfb_object_s *)CLASS_IMPL_FN_N(name)(plugin))
+static struct cfb_class_helper_s **g_cfb_class_helper;
+static struct cfb_plugin_db_s **g_cfb_plugin_db;
+static struct cfb_plugin_s **g_cfb_sys_plugin;
+static int g_cfb_has_init;
+
+static int on_binding(cfb_plugin_getter_t aPluginGetter, char aState)
 {
-    cfb_class_hnd_t cfb_class_helper_s;
-} g_hnds;
-
-static int init_plugin(cfb_plugin_getter_t aPluginGetter, char aState);
-
-void load_cfabric(cfb_define_plugin_t define_plugin)
-{
-    cfb_plugin_t **vMyCtx;
-    cfb_define_plugin("cfabric@1.0.0", &vMyCtx, init_plugin);
-
-    // Put all the class implementation here
-    ImplementClass(cfb_class_helper_s, vMyCtx);
+    static struct cfb_plugin_s **external_plugin;
+    aPluginGetter("cfabric@0.0.1", &external_plugin);
+    return external_plugin != g_cfb_sys_plugin;
 }
 
-static int init_plugin(cfb_plugin_getter_t aPluginGetter, char aState)
+static void cfb_init()
 {
-    struct cfb_plugin_s **mod;
-    int err;
+    if (g_cfb_has_init)
+        return;
+    g_cfb_has_init = 1;
 
-    /*loads an external model*/
-    if (err = aPluginGetter("cfabric@1.0.1", &mod))
-    {
-        return err;
-    }
+    //initialise system plugin MUST always be called first
+    g_cfb_class_helper = implement_class(cfb_class_helper_s, NULL)->on_new(NULL);
+    g_cfb_sys_plugin = implement_class(cfb_plugin_s, NULL)->on_new(NULL);
 
-    /*get the hnd of the class name*/
-    g_hnds.cfb_class_helper_s = (*mod)->get_class_hnd(mod, ClassName(cfb_class_helper_s));
-    struct cfb_class_helper_s **vObj = (*mod)->get_obj_by_class_hnd(mod, g_hnds.cfb_class_helper_s);
+    //create system objects
+    g_cfb_plugin_db = implement_class(cfb_plugin_db_s, g_cfb_sys_plugin)->on_new(NULL);
+    (*g_cfb_plugin_db)->publish_plugin(g_cfb_plugin_db, "cfabric@0.0.1", g_cfb_sys_plugin, on_binding);
+}
+struct cfb_class_helper_s **cfb_class_helper()
+{
+    cfb_init();
+    return g_cfb_class_helper;
+}
 
-    return 0;
+struct cfb_plugin_s **_cfb_new_plugin()
+{
+    cfb_init();
+    return implement_class(cfb_plugin_s, NULL);
+}
+
+struct cfb_plugin_db_s **cfb_plugin_db()
+{
+    cfb_init();
+    return g_cfb_plugin_db;
 }
